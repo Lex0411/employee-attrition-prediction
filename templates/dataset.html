@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Dataset — Employee Attrition{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>1. Dataset Handling</h2>
+  <p>Import employee data from CSV or Excel, or use the built-in sample.</p>
+
+  <form method="post" enctype="multipart/form-data" class="form-row">
+    <input type="hidden" name="action" value="upload">
+    <input type="file" name="file" accept=".csv,.xlsx,.xls">
+    <button type="submit" class="btn">Upload File</button>
+  </form>
+
+  <form method="post" class="form-row">
+    <input type="hidden" name="action" value="sample">
+    <button type="submit" class="btn btn-secondary">Load Sample Dataset</button>
+  </form>
+</section>
+
+{% if has_data and info %}
+<section class="card">
+  <h2>Dataset Information</h2>
+  <ul class="stats-list">
+    <li><strong>Rows:</strong> {{ info.rows }}</li>
+    <li><strong>Columns:</strong> {{ info.columns }}</li>
+    <li><strong>Target column:</strong> {{ info.target_column }}</li>
+    <li><strong>Missing values:</strong> {{ info.total_missing }}</li>
+  </ul>
+  {% if info.missing_counts %}
+  <p><strong>Columns with missing data:</strong></p>
+  <ul>{% for col, cnt in info.missing_counts.items() %}<li>{{ col }}: {{ cnt }}</li>{% endfor %}</ul>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Data Preview (first 20 rows)</h2>
+  <div class="table-wrap">{{ preview | safe }}</div>
+</section>
+
+<p class="cta"><a href="{{ url_for('preprocess_page') }}" class="btn btn-primary">Next → Preprocess</a></p>
+{% endif %}
+{% endblock %}

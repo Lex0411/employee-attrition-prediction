@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Predict — Employee Attrition{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>5. Prediction Output</h2>
+  <p>Enter employee details to predict whether they are likely to leave (<strong>Yes</strong>) or stay (<strong>No</strong>).</p>
+
+  <form method="post" class="predict-form">
+    <label>Model to use
+      <select name="model">
+        {% for m in models %}<option value="{{ m }}" {% if m == 'KNN' %}selected{% endif %}>{{ m }}</option>{% endfor %}
+      </select>
+    </label>
+
+    {% for col in features %}
+    <label>{{ col }}
+      {% if field_types.get(col) == 'text' %}
+      <input type="text" name="{{ col }}" value="{{ sample[col] | e }}">
+      {% else %}
+      <input type="number" name="{{ col }}" value="{{ sample[col] }}" step="any">
+      {% endif %}
+    </label>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Predict Attrition</button>
+  </form>
+</section>
+
+{% if prediction %}
+<section class="card result-box">
+  <h2>Prediction Result</h2>
+  <p class="big-result {% if prediction.label == 'Yes' %}leave{% else %}stay{% endif %}">
+    {{ prediction.label }}
+  </p>
+  <p>
+    {% if prediction.label == 'Yes' %}
+    This employee is predicted to <strong>leave</strong> the company.
+    {% else %}
+    This employee is predicted to <strong>stay</strong>.
+    {% endif %}
+  </p>
+  {% if prediction.probability %}
+  <p>Confidence: {{ prediction.probability }}%</p>
+  {% endif %}
+  <p>Model used: {{ prediction.model }}</p>
+</section>
+{% endif %}
+{% endblock %}

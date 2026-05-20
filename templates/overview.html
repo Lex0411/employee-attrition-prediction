@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Overview — Employee Attrition{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>Business Problem</h2>
+  <p><strong>Employee attrition prediction</strong> helps HR and management see which employees are likely to leave the company. Early insight supports retention plans, hiring, and cost control.</p>
+</section>
+
+<section class="card">
+  <h2>Predictive Modeling Workflow</h2>
+  <ol class="workflow-list">
+    <li><strong>Problem identification</strong> — Will the employee leave? (Yes / No)</li>
+    <li><strong>Data collection</strong> — Upload CSV/Excel or use the sample dataset</li>
+    <li><strong>Data preprocessing</strong> — Missing values, encoding, scaling, train/test split</li>
+    <li><strong>Feature selection</strong> — All employee attributes except <code>Attrition</code></li>
+    <li><strong>Model training</strong> — KNN, SVM, and ANN</li>
+    <li><strong>Model testing</strong> — Hold-out test set (20%)</li>
+    <li><strong>Performance evaluation</strong> — Accuracy, Precision, Recall, F1, Confusion Matrix</li>
+    <li><strong>Prediction output</strong> — Predict attrition for a new employee</li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2>Algorithms Used</h2>
+  <table class="info-table">
+    <tr><th>KNN</th><td>K-Nearest Neighbor — classifies by similar employees in the training data</td></tr>
+    <tr><th>SVM</th><td>Support Vector Machine — finds a boundary between leave / stay groups</td></tr>
+    <tr><th>ANN</th><td>Artificial Neural Network — learns patterns through hidden layers</td></tr>
+  </table>
+</section>
+
+<p class="cta"><a href="{{ url_for('dataset_page') }}" class="btn btn-primary">Start → Load Dataset</a></p>
+{% endblock %}

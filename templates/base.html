@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Employee Attrition Prediction{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="container">
+      <h1>Employee Attrition Prediction</h1>
+      <p class="subtitle">IS 108 — Business Intelligence (KNN · SVM · ANN)</p>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <div class="container nav-links">
+      <a href="{{ url_for('overview') }}" class="{% if request.endpoint == 'overview' %}active{% endif %}">1. Overview</a>
+      <a href="{{ url_for('dataset_page') }}" class="{% if request.endpoint == 'dataset_page' %}active{% endif %}">2. Dataset</a>
+      <a href="{{ url_for('preprocess_page') }}" class="{% if request.endpoint == 'preprocess_page' %}active{% endif %}">3. Preprocess</a>
+      <a href="{{ url_for('train_page') }}" class="{% if request.endpoint == 'train_page' %}active{% endif %}">4. Train</a>
+      <a href="{{ url_for('results_page') }}" class="{% if request.endpoint == 'results_page' %}active{% endif %}">5. Results</a>
+      <a href="{{ url_for('predict_page') }}" class="{% if request.endpoint == 'predict_page' %}active{% endif %}">6. Predict</a>
+    </div>
+  </nav>
+
+  <main class="container main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">IS 108 Final Project — Employee Attrition Prediction</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Results — Employee Attrition{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>4. Model Evaluation & Comparison</h2>
+  <p>Best model by accuracy: <strong>{{ best_model }}</strong></p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Accuracy</th>
+        <th>Precision</th>
+        <th>Recall</th>
+        <th>F1-Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for name, m in results.items() %}
+      <tr class="{% if name == best_model %}highlight{% endif %}">
+        <td><strong>{{ name }}</strong></td>
+        <td>{{ m.accuracy }}</td>
+        <td>{{ m.precision }}</td>
+        <td>{{ m.recall }}</td>
+        <td>{{ m.f1 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% for name, m in results.items() %}
+<section class="card">
+  <h3>{{ name }} — Confusion Matrix</h3>
+  <p class="hint">Rows = actual, Columns = predicted</p>
+  <table class="cm-table">
+    <thead>
+      <tr><th></th>{% for c in m.class_names %}<th>Pred: {{ c }}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
+      {% for i in range(m.class_names | length) %}
+      <tr>
+        <th>Actual: {{ m.class_names[i] }}</th>
+        {% for j in range(m.class_names | length) %}
+        <td>{{ m.confusion_matrix[i][j] }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endfor %}
+
+<p class="cta"><a href="{{ url_for('predict_page') }}" class="btn btn-primary">Make a Prediction →</a></p>
+{% endblock %}

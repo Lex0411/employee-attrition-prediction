@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Train — Employee Attrition{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>3. Model Training</h2>
+  <p>Train and compare all three required algorithms on the preprocessed data:</p>
+  <ul>
+    <li><strong>KNN</strong> — K-Nearest Neighbors (k=5)</li>
+    <li><strong>SVM</strong> — Support Vector Machine (RBF kernel)</li>
+    <li><strong>ANN</strong> — Neural Network (64 → 32 hidden layers)</li>
+  </ul>
+
+  <form method="post">
+    <button type="submit" class="btn btn-primary">Train All Models</button>
+  </form>
+</section>
+
+{% if trained %}
+<section class="card success-card">
+  <p>Models trained. View performance metrics and comparison.</p>
+  <p class="cta"><a href="{{ url_for('results_page') }}" class="btn btn-primary">View Results →</a></p>
+</section>
+{% endif %}
+{% endblock %}
