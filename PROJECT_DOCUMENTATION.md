@@ -1,4 +1,4 @@
-# Employee Attrition Prediction — Project Documentation
+# Employee Attrition Prediction 
 
 **Course:** IS 108 – Intelligence System Final Project SY 2025-2026
 
@@ -10,11 +10,11 @@ Employee Attrition Prediction Using KNN, SVM, and Artificial Neural Network
 
 ## Team Members
 
-| Name | Role |
-|------|------|
-| *(Fill in)* | |
-| *(Fill in)* | |
-| *(Fill in)* | |
+|           Name         |
+|------------|-----------|
+| Alexia Sheen E. Cabase | 
+| Joshua Kyle S. Cabalan | 
+| Ted Theone Cabanete    | 
 
 ## Business Problem Addressed
 
@@ -56,31 +56,3 @@ Employee turnover (attrition) is costly for organizations. This application pred
 - **Recall** — weighted recall across classes
 - **F1-Score** — harmonic mean of precision and recall
 - **Confusion Matrix** — actual vs. predicted counts per class
-
-## Comparison of Results
-
-*(Run the application and paste your results table here after training on the sample dataset.)*
-
-| Model | Accuracy | Precision | Recall | F1-Score |
-|-------|----------|-----------|--------|----------|
-| KNN   |          |           |        |          |
-| SVM   |          |           |        |          |
-| ANN   |          |           |        |          |
-
-**Best model:** *(fill after demo)*
-
-## Conclusion and Recommendations
-
-- All three algorithms address the same classification problem and can be compared side-by-side in the app.
-- *(Add 2–3 sentences on which model performed best on your data and why HR might use predictions alongside human judgment.)*
-- Recommend retraining when new employee data is available and validating predictions before major HR decisions.
-
-## How to Demo (10–15 min presentation)
-
-1. Explain the business problem (employee attrition)
-2. Load sample dataset → show table and dataset info
-3. Run preprocessing → explain steps
-4. Train all three models
-5. Compare metrics and confusion matrices
-6. Enter one employee profile → show prediction
-7. Summarize best model and recommendations
