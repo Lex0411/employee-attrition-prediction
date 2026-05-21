@@ -8,13 +8,6 @@
 
 Employee Attrition Prediction Using KNN, SVM, and Artificial Neural Network
 
-## Team Members
-
-|           Name         |
-|------------|-----------|
-| Alexia Sheen E. Cabase | 
-| Joshua Kyle S. Cabalan | 
-| Ted Theone Cabanete    | 
 
 ## Business Problem Addressed
 
