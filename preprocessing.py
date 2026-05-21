@@ -61,7 +61,7 @@ def _is_numeric_column(series):
 
 
 def _fill_missing_column(series):
-    """Fill missing values with median (numeric) or mode (text)."""
+    """Fill missing values: median for numeric, mode/Unknown for text."""
     if _is_numeric_column(series):
         numeric = pd.to_numeric(series, errors="coerce")
         median_val = numeric.median()
@@ -110,6 +110,7 @@ def preprocess_data(df, test_size=0.2, random_state=42):
 
     # Fill missing values (numeric vs text — avoids median on string columns)
     for col in feature_cols:
+        # ensure each feature has no missing values before encoding/scaling
         work[col] = _fill_missing_column(work[col])
 
     X = work[feature_cols]
@@ -119,6 +120,7 @@ def preprocess_data(df, test_size=0.2, random_state=42):
     X_encoded = X.copy()
 
     for col in X_encoded.columns:
+        # Encode categorical columns, keep numeric columns numeric
         if _is_numeric_column(X_encoded[col]):
             X_encoded[col] = pd.to_numeric(X_encoded[col], errors="coerce").fillna(0)
         else:
@@ -131,6 +133,7 @@ def preprocess_data(df, test_size=0.2, random_state=42):
     class_names = list(target_encoder.classes_)
 
     scaler = StandardScaler()
+    # Standardize features prior to training
     X_scaled = scaler.fit_transform(X_encoded)
 
     try:

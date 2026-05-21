@@ -33,10 +33,12 @@ def get_df():
 
 
 def set_df(df):
+    """Store dataset CSV in session and clear any derived ML state."""
     from io import StringIO
     buf = StringIO()
     df.to_csv(buf, index=False)
     session["dataset_csv"] = buf.getvalue()
+    # Invalidate derived state when dataset changes
     session.pop("preprocess", None)
     session.pop("results", None)
     clear_trained_bundle()
@@ -51,6 +53,7 @@ def overview():
 
 @app.route("/dataset", methods=["GET", "POST"])
 def dataset_page():
+    """Handle dataset upload or load sample and show preview."""
     if request.method == "POST":
         action = request.form.get("action")
         try:
@@ -76,6 +79,7 @@ def dataset_page():
 
 @app.route("/preprocess", methods=["GET", "POST"])
 def preprocess_page():
+    """Run preprocessing and cache results for training steps."""
     df = get_df()
     if df is None:
         flash("Load a dataset first.", "error")
@@ -94,6 +98,7 @@ def preprocess_page():
                     "test_size_split": data["test_size"],
                     "encoded_columns": data["encoded_columns"],
                 }
+                # Cache preprocessed arrays and metadata for later training/prediction
                 app.config["_ml_cache"] = data
                 flash("Preprocessing complete. Ready to train models.", "success")
             summary = session.get("preprocess")
@@ -105,6 +110,7 @@ def preprocess_page():
 
 @app.route("/train", methods=["GET", "POST"])
 def train_page():
+    """Train all models using cached preprocessing and persist trained bundle."""
     df = get_df()
     if df is None:
         flash("Load a dataset first.", "error")
@@ -119,6 +125,7 @@ def train_page():
             if data is None:
                 data = preprocess_data(df)
                 app.config["_ml_cache"] = data
+            # Train models and collect results + trained model objects
             results = train_all_models(
                 data["X_train"], data["y_train"],
                 data["X_test"], data["y_test"],
@@ -129,6 +136,7 @@ def train_page():
                 for name, r in results.items()
             }
             models = {name: r["model"] for name, r in results.items()}
+            # Save models and preprocessing artifacts for later prediction
             app.config["_models"] = models
             app.config["_ml_cache"] = data
             save_trained_bundle(
@@ -149,6 +157,7 @@ def train_page():
 
 @app.route("/results")
 def results_page():
+    """Display training results and highlight best-performing model."""
     if "results" not in session:
         flash("Train models first.", "error")
         return redirect(url_for("train_page"))
@@ -192,6 +201,7 @@ def _load_predict_state():
 
 @app.route("/predict", methods=["GET", "POST"])
 def predict_page():
+    """Predict attrition for a single form row using a selected model."""
     if "results" not in session:
         flash("Train models first.", "error")
         return redirect(url_for("train_page"))
@@ -209,6 +219,7 @@ def predict_page():
 
                 features = data["feature_names"]
                 row = {}
+                # Convert submitted form values to numeric inputs expected by the model
                 for col in features:
                     val = request.form.get(col, "").strip()
                     if col in data["label_encoders"]:
@@ -220,6 +231,7 @@ def predict_page():
                     else:
                         row[col] = float(val) if val else 0.0
 
+                # Scale features, run prediction, and format result
                 X_row = np.array([[row[c] for c in features]])
                 X_scaled = data["scaler"].transform(X_row)
                 model = models.get(model_used) or list(models.values())[0]

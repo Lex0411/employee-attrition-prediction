@@ -13,18 +13,21 @@ from sklearn.svm import SVC
 
 
 def train_knn(X_train, y_train, n_neighbors=5):
+    """Train K-Nearest Neighbors classifier and return fitted model."""
     model = KNeighborsClassifier(n_neighbors=n_neighbors)
     model.fit(X_train, y_train)
     return model
 
 
 def train_svm(X_train, y_train):
+    """Train RBF-kernel SVM with probability estimates enabled."""
     model = SVC(kernel="rbf", probability=True, random_state=42)
     model.fit(X_train, y_train)
     return model
 
 
 def train_ann(X_train, y_train):
+    """Train a small MLP neural network with early stopping and return it."""
     model = MLPClassifier(
         hidden_layer_sizes=(64, 32),
         max_iter=500,
@@ -52,7 +55,10 @@ def evaluate_model(model, X_test, y_test, class_names):
 
 
 def train_all_models(X_train, y_train, X_test, y_test, class_names):
-    """Train KNN, SVM, ANN and return comparison results."""
+    """Train KNN, SVM, and ANN; evaluate and return a results dict.
+
+    Each entry contains metrics and the fitted `model` object.
+    """
     results = {}
 
     knn = train_knn(X_train, y_train)
@@ -68,7 +74,10 @@ def train_all_models(X_train, y_train, X_test, y_test, class_names):
 
 
 def predict_one(model, features_scaled, class_names):
-    """Predict attrition for a single employee."""
+    """Predict attrition label and optional probability for one sample.
+
+    Returns `(label, prob)` where `prob` is percentage or `None`.
+    """
     pred_idx = model.predict(features_scaled)[0]
     label = class_names[pred_idx]
     prob = None
